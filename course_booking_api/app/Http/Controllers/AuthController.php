@@ -1,4 +1,28 @@
 <?php
+/*
+|--------------------------------------------------------------------------
+| AuthController.php Actions
+|--------------------------------------------------------------------------
+| Made by Mohamed Alzohery
+|--------------------------------------------------------------------------
+| This controller handles user authentication for the Course Booking API.
+| It includes methods for user registration, login, and logout, leveraging
+| Laravel Sanctum for API token management.
+|
+| 1. register(Request $request): Handles the registration of new users,
+|    validates input, creates a new user, generates a Sanctum token, and
+|    returns the user and token in a JSON response.
+|
+| 2. login(Request $request): Handles the login of existing users,
+|    authenticates the user based on email and password, generates a
+|    Sanctum token upon successful authentication, and returns the user
+|    and token in a JSON response. Returns an error for invalid credentials.
+|
+| 3. logout(Request $request): Handles the logout of authenticated users,
+|    revokes the current Sanctum access token associated with the user,
+|    and returns a JSON response indicating successful logout.
+|
+*/
 
 namespace App\Http\Controllers;
 
@@ -67,11 +91,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Successfully logged out']);
-
-        
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json(['message' => 'Logged out successfully']);
+        } else {
+            return response()->json(['message' => 'Not authenticated'], 401); // أو أي استجابة مناسبة
+        }
     }
 
 }

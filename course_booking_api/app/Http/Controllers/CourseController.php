@@ -1,10 +1,57 @@
 <?php
-
+/*
+|--------------------------------------------------------------------------
+| CourseController.php Actions
+|--------------------------------------------------------------------------
+| Made by Mohamed Alzohery
+|--------------------------------------------------------------------------
+| This controller manages course-related operations for the Course Booking API.
+| It includes methods for creating, retrieving, updating, and deleting courses,
+| with role-based authorization to ensure only instructors can manage their own courses
+| and all authenticated users can view course details.
+|
+| 1. index():
+|    Retrieves and returns a listing of all available courses.
+|    This method is accessible to any authenticated user (student or instructor).
+|    Returns a JSON response containing an array of course objects.
+|
+| 2. store(Request $request):
+|    Handles the creation of a new course.
+|    Accessible only to authenticated users with the 'instructor' role.
+|    Validates the incoming request data (title, description, max_students).
+|    Creates a new course record in the database, associating it with the
+|    ID of the currently authenticated instructor.
+|    Returns a JSON response containing the newly created course object with a 201 Created status.
+|
+| 3. show(Course $course):
+|    Retrieves and returns the details of a specific course.
+|    Accessible to any authenticated user (student or instructor).
+|    Receives the course object via route model binding.
+|    Returns a JSON response containing the details of the requested course.
+|
+| 4. update(Request $request, Course $course):
+|    Handles the updating of an existing course's details.
+|    Accessible only to authenticated users with the 'instructor' role who own the course
+|    (checked via authorization policies).
+|    Validates the incoming request data (title, description, max_students).
+|    Updates the specified course record in the database.
+|    Returns a JSON response containing the updated course object.
+|    Returns a 403 Forbidden status if the authenticated instructor does not own the course.
+|
+| 5. destroy(Course $course):
+|    Handles the deletion of an existing course.
+|    Accessible only to authenticated users with the 'instructor' role who own the course
+|    (checked via authorization policies).
+|    Deletes the specified course record from the database.
+|    Returns a 204 No Content status upon successful deletion.
+|    Returns a 403 Forbidden status if the authenticated instructor does not own the course.
+|
+*/
 namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller; // تأكد من وجود هذا السطر
+use Illuminate\Routing\Controller; 
 
 class CourseController extends Controller
 {
@@ -106,7 +153,7 @@ class CourseController extends Controller
     // public function destroy(Course $course)
     // {
     //     $course->delete();
-    //     return response()->noContent(); // إرجاع استجابة برمز الحالة 204 بدون محتوى
+    //     return response()->noContent(); 
     // }
 
     
